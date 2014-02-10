@@ -15,7 +15,10 @@ class TopicTestCase(PyOtTestCase):
         self.assertTrue(len(topics) > 0)
 
     def test_topic_detail(self):
-        pass
+        topics = self.api.get_topic_list()
+        topic = self.api.get_topic_detail(topics[0].id)
+        self.assertEqual(topic.id, topics[0].id)
+        self.assertEqual(topic.name, topics[0].name)
 
 
 if __name__ == '__main__':

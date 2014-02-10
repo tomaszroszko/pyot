@@ -41,6 +41,22 @@ class Api(object):
         json = self.request(path)
         return Topic.parse_list(self, json)
 
+    def get_topic_detail(self, pk):
+        path = self.get_api_path('topics/%d' % pk)
+        json = self.request(path)
+        return Topic.parse(self, json)
+
+    def get_channel_list(self):
+        path = self.get_api_path('channels')
+        json = self.request(path)
+        return Channel.parse_list(self, json)
+
+    def get_channel_detail(self, pk):
+        path = self.get_api_path('channels/%d' % pk)
+        json = self.request(path)
+        return Channel.parse(self, json)
+
+
     def parse_response(self, response):
         if self.response_format == consts.FORMAT_JSON:
             return response.json()
