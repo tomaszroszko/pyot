@@ -29,8 +29,11 @@ class Topic(OtModel):
 
 
 class Channel(OtModel):
-    pass
+
+    def get_news(self):
+        """get news for this channel"""
+        return self._api.get_channel_news(channel_pk=self.id)
 
 
-class News(OtModel):
+class ChannelNews(OtModel):
     pass

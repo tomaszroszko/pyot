@@ -2,13 +2,13 @@ import requests
 import consts
 
 from .exceptions import PyOtConfigException, PyOtResponseError
-from .models import Topic, Channel, News
+from .models import Topic, Channel, ChannelNews
 
 
 class Api(object):
 
-    API_VERSION = 'v1'
-    API_URL = 'https://app.opentopic.com/%(site_slug)s/api/%(api_version)s/'
+    API_VERSION = u'v1'
+    API_URL = u'https://app.opentopic.com/%(site_slug)s/api/%(api_version)s/'
 
     def __init__(self, site_slug, username, api_key,
                  response_format=consts.FORMAT_JSON,
@@ -28,8 +28,12 @@ class Api(object):
             'api_version': self.API_VERSION
         }
 
+    def add_filter(self, path, keyword, value):
+        path += u'&%s=%s' % (keyword, unicode(value))
+        return path
+
     def get_api_path(self, path):
-        return '%(base)s%(path)s/?username=%(username)s&api_key=%(key)s' % {
+        return u'%(base)s%(path)s/?username=%(username)s&api_key=%(key)s' % {
             'base': self.base_url,
             'path': path,
             'username': self.username,
@@ -56,6 +60,12 @@ class Api(object):
         json = self.request(path)
         return Channel.parse(self, json)
 
+    def get_channel_news(self, channel_pk=None):
+        path = self.get_api_path('channel-news')
+        if channel_pk:
+            path = self.add_filter(path, 'channel', channel_pk)
+        json = self.request(path)
+        return ChannelNews.parse_list(self, json)
 
     def parse_response(self, response):
         if self.response_format == consts.FORMAT_JSON:
