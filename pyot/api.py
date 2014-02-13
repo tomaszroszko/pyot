@@ -1,4 +1,3 @@
-import requests
 import consts
 
 from .exceptions import PyOtConfigException, PyOtResponseError
@@ -75,6 +74,7 @@ class Api(object):
                 'Only JSON format is supported in this version')
 
     def request(self, path):
+        import requests
         response = requests.get(path)
         if response.status_code == 200:
             return self.parse_response(response)
