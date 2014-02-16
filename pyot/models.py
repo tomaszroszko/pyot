@@ -12,6 +12,7 @@ class OtModel(object):
         obj = cls(api)
         for (key, value) in json.items():
             setattr(obj, key, value)
+        obj._json = json
         return obj
 
     @classmethod
